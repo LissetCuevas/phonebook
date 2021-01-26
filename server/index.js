@@ -34,7 +34,7 @@ app.get("/persons", function(req , res){
         var request = new sql.Request(dbConn);
         request.query("select * from persons").then(function (resp) {
             console.log(resp);
-            res.send("Values Show")
+            res.send(resp.recordset)
             dbConn.close();
         }).catch(function (err) {
             console.log(err);
