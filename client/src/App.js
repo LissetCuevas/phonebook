@@ -30,7 +30,7 @@ const PersonForm = (props) => (
     </div>
     <div className="mb-3">
       <label className="form-label">Number</label>
-      <input className="form-control" value={props.newNumber} onChange={props.handleNumberChange}/>
+      <input className="form-control" pattern="^[0-9]{3,45}$" value={props.newNumber} onChange={props.handleNumberChange}/>
     </div>
     <div>
       <button type="submit" className="btn btn-primary">Add</button>
@@ -46,7 +46,7 @@ const Person = (props) => (
         <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
       </svg>
       <b>{props.person.name}</b>: {props.person.number}
-      <button onClick={() => props.deletePerson(props.person)} className="btn-close" aria-label="Delete User"></button>
+      <button onClick={() => props.deletePerson(props.person)} className="btn-close" aria-label="Delete User" id="close-CSS"></button>
     </p>
   </div>
 )
