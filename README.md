@@ -9,6 +9,6 @@ $ node index.js
 
 ### To run client (frontend)
 ``` 
-$ cd clien
+$ cd client
 $ npm start
 ``` 
