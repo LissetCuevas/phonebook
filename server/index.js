@@ -29,15 +29,12 @@ var dbConfig = {
 
 //GET API
 app.get("/persons", function(req , res){
-	getPersons()
-});
-
-function getPersons() {
-    var dbConn = new sql.ConnectionPool(dbConfig);
+	var dbConn = new sql.ConnectionPool(dbConfig);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
         request.query("select * from persons").then(function (resp) {
             console.log(resp);
+            res.send("Values Show")
             dbConn.close();
         }).catch(function (err) {
             console.log(err);
@@ -46,22 +43,20 @@ function getPersons() {
     }).catch(function (err) {
         console.log(err);
     });
-}
+});
 
 //POST API
 app.post("/persons", function(req , res){
-	insertEmployees()
-});
-function insertEmployees() {
-    var dbConn = new sql.ConnectionPool(dbConfig);
+	var dbConn = new sql.ConnectionPool(dbConfig);
     dbConn.connect().then(function () {
 		var transaction = new sql.Transaction(dbConn);
 		transaction.begin().then(function () {
 			var request = new sql.Request(transaction);
-            request.query("INSERT INTO persons (name,number) VALUES (req.body.name,req.body.number")
+            request.query(`INSERT INTO persons (name,number) VALUES (${req.body.name},${req.body.number})`)
 			.then(function 	() {
 				transaction.commit().then(function (resp) {
                     console.log(resp);
+                    res.send("Values Inserted")
                     dbConn.close();
                 }).catch(function (err) {
                     console.log("Error in Transaction Commit " + err);
@@ -79,4 +74,4 @@ function insertEmployees() {
         console.log(err);
     });
   });
-}
+});
