@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Notification = ({ message, type }) => {
   if(message === null){
@@ -15,30 +16,37 @@ const Notification = ({ message, type }) => {
 
 const Filter = (props) =>( 
   <div>
-    Filter shown with: <input value={props.filter} onChange={props.handleFilterChange}></input>
+    <form className="d-flex">
+      <input value={props.filter} onChange={props.handleFilterChange} className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
+      <button className="btn btn-outline-success">Search</button>
+    </form>  
   </div>
 )
 
 const PersonForm = (props) => (
   <form onSubmit={props.addPerson}>
-    <div>
-      Name: <input value={props.newName} onChange={props.handleNameChange}/>
+    <div className="mb-3">
+      <label className="form-label">Name</label> 
+      <input className="form-control" value={props.newName} onChange={props.handleNameChange}/>
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Number</label>
+      <input className="form-control" value={props.newNumber} onChange={props.handleNumberChange}/>
     </div>
     <div>
-      Number: <input value={props.newNumber} onChange={props.handleNumberChange}/>
-    </div>
-    <div>
-      <button type="submit">Add</button>
+      <button type="submit" className="btn btn-primary">Add</button>
     </div>
   </form>
 )
 
 const Person = (props) => (
   <div key={props.person.name}>
-    <b>{props.person.name}</b>: {props.person.number}
-    <button onClick={() => props.deletePerson(props.person)}>
-      delete
-    </button>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+      <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+    </svg>
+    <p><b>{props.person.name}</b>: {props.person.number}</p>
+    <button onClick={() => props.deletePerson(props.person)} class="btn-close" aria-label="Delete User"></button>
   </div>
 )
 
@@ -153,30 +161,39 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <Notification 
-        message={message}
-        type={messageType}
-      />
-      <Filter 
-        filter={filter} 
-        handleFilterChange={handleFilterChange}
-      />
-      
-      <h2>Add a new</h2>
-      <PersonForm 
-        addPerson={addPerson}
-        newName={newName} 
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
-      />
-
-      <h2>Numbers</h2>
-      <Persons 
-        persons={filteredPersons}
-        deletePerson={deletePerson}
-      />
+      <nav className="navbar navbar-light bg-light">
+        <div className="container-fluid">
+          <h3>Phonebook</h3>
+          <Filter 
+            filter={filter} 
+            handleFilterChange={handleFilterChange}
+          />
+        </div>
+      </nav>
+      <div className ="row">
+        <Notification 
+          message={message}
+          type={messageType}
+        />
+        <div className="col main-div">
+          <h4>Add/Edit contact</h4>
+          <p>*To edit contact enter current name and new number</p>
+          <PersonForm 
+            addPerson={addPerson}
+            newName={newName} 
+            handleNameChange={handleNameChange}
+            newNumber={newNumber}
+            handleNumberChange={handleNumberChange}
+          />
+        </div>
+        <div className="col-5 main-div">
+          <h4>Numbers</h4>
+          <Persons 
+            persons={filteredPersons}
+            deletePerson={deletePerson}
+          />
+        </div>
+      </div>
     </div>
   )
 }
