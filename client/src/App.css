@@ -42,3 +42,23 @@
   margin-right: 20%;
   margin-top: 5%;
 }
+
+.success {
+  color: rgb(5, 85, 5);
+  background: rgb(191, 233, 194);
+  font-size: 16px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: rgb(126, 29, 5);
+  background: rgb(236, 180, 180);
+  font-size: 16px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

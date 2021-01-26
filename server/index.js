@@ -51,8 +51,9 @@ app.post("/persons", function(req , res){
     dbConn.connect().then(function () {
 		var transaction = new sql.Transaction(dbConn);
 		transaction.begin().then(function () {
-			var request = new sql.Request(transaction);
-            request.query(`INSERT INTO persons (name,number) VALUES (${req.body.name},${req.body.number})`)
+            var request = new sql.Request(transaction);
+            var sqlStatment = "INSERT INTO persons (name,number) VALUES ('"+req.body.name+"','"+req.body.number+"')";
+            request.query(sqlStatment)
 			.then(function 	() {
 				transaction.commit().then(function (resp) {
                     console.log(resp);
