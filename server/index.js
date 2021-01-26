@@ -1,107 +1,82 @@
-const express = require("express")
-const app = express()
-const sql = require("mssql")
+var express = require("express");
+var bodyParser = require("body-parser");
+var sql = require("mssql");
+var cors = require('cors');
+var app = express(); 
 
-/*const cors = require('cors')
-app.use(cors())
-app.use(express.json())*/
+// Body Parser Middleware
+app.use(bodyParser.json()); 
+app.use(cors());
 
-const config = {
-    user: 'WebClient',
-    password: '123456789',
-    server: 'localhost', 
-    database: 'phonebook',
-    port: 1433
+//Setting up server
+ var server = app.listen(process.env.PORT || 3001, function () {
+    var port = server.address().port;
+    console.log("App now running on port", port);
+ });
+
+ //Initializing connection string
+var dbConfig = {
+    user:  "WebClient",
+    password: "123456789",
+    server: "DESKTOP-RVGL8OV\\SQLDEVELOPER",
+    database: "phonebook",
+    "options": {
+        "encrypt": true,
+        "enableArithAbort": true,
+        "ous": true
+        }
+};
+
+//GET API
+app.get("/persons", function(req , res){
+	getPersons()
+});
+
+function getPersons() {
+    var dbConn = new sql.ConnectionPool(dbConfig);
+    dbConn.connect().then(function () {
+        var request = new sql.Request(dbConn);
+        request.query("select * from persons").then(function (resp) {
+            console.log(resp);
+            dbConn.close();
+        }).catch(function (err) {
+            console.log(err);
+            dbConn.close();
+        });
+    }).catch(function (err) {
+        console.log(err);
+    });
 }
 
-app.post('/persons',(req,res) => {
-    const name = req.body.name
-    const number = req.body.number
-    sql.connect(config, (err) => {
-        if (err){ 
-            console.log(err)
-        }else{
-            const request = new sql.Request();
-            request.query(
-                'INSERT INTO person (name,number) VALUES (?,?)',
-                [name,number],
-                (err,result) => {
-                    if (err){
-                        console.log(err)
-                    }else{
-                        res.send("Values Inserted")
-                    }
-                }
-            )
-        }
-    })
-})
-
-app.get('/persons',(req,res) => {
-    sql.connect(config, (err) => {
-        if (err){ 
-            console.log(err)
-        }else{
-            var request = new sql.Request();
-            request.query(
-                'SELECT * FROM phonebook',
-                (err,result) => {
-                    if (err){
-                        console.log(err)
-                    }else{
-                        res.send(result)
-                    }
-                }
-            )
-        }
-    })
-})
-
-app.put('/persons',(req,res) => {
-    const id = req.body.id
-    const number = req.body.wage
-    sql.connect(config, (err) => {
-        if (err){ 
-            console.log(err)
-        }else{
-            const request = new sql.Request();
-            request.query(
-                'UPDATE phonebook SET number = ? WHERE id = ?',
-                [number, id],
-                (err,result) => {
-                    if (err){
-                        console.log(err)
-                    }else{
-                        res.send(result)
-                    }
-                }
-            )
-        }
-    })
-})
-
-app.delete('/persons/:id',(req,res) => {
-    const id = req.params.id
-    sql.connect(config, (err) => {
-        if (err){ 
-            console.log(err)
-        }else{
-            const request = new sql.Request();
-            request.query(
-                'DELETE FROM phonebook WHERE id = ?', 
-                id,
-                (err,result) => {
-                    if (err){
-                        console.log(err)
-                    }else{
-                        res.send(result)
-                    }
-                }
-            )
-        }
-    })
-})
-
-app.listen(3001, () => {
-    console.log("I'm running")
-})
+//POST API
+app.post("/persons", function(req , res){
+	insertEmployees()
+});
+function insertEmployees() {
+    var dbConn = new sql.ConnectionPool(dbConfig);
+    dbConn.connect().then(function () {
+		var transaction = new sql.Transaction(dbConn);
+		transaction.begin().then(function () {
+			var request = new sql.Request(transaction);
+            request.query("INSERT INTO persons (name,number) VALUES (req.body.name,req.body.number")
+			.then(function 	() {
+				transaction.commit().then(function (resp) {
+                    console.log(resp);
+                    dbConn.close();
+                }).catch(function (err) {
+                    console.log("Error in Transaction Commit " + err);
+                    dbConn.close();
+                });
+			}).catch(function (err) {
+                console.log("Error in Transaction Begin " + err);
+                dbConn.close();
+            })
+		}).catch(function (err) {
+            console.log(err);
+            dbConn.close();
+        }).catch(function (err) {
+        //12.
+        console.log(err);
+    });
+  });
+}
