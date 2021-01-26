@@ -71,7 +71,70 @@ app.post("/persons", function(req , res){
             console.log(err);
             dbConn.close();
         }).catch(function (err) {
-        //12.
+        console.log(err);
+    });
+  });
+});
+
+//PUT API
+app.put("/persons", function(req , res){
+	var dbConn = new sql.ConnectionPool(dbConfig);
+    dbConn.connect().then(function () {
+		var transaction = new sql.Transaction(dbConn);
+		transaction.begin().then(function () {
+            var request = new sql.Request(transaction);
+            console.log(req.body)
+            var sqlStatment = "UPDATE persons SET number ='"+req.body.number+"' WHERE name='"+req.body.name+"';";
+            request.query(sqlStatment)
+			.then(function 	() {
+				transaction.commit().then(function (resp) {
+                    console.log(resp);
+                    res.send("Value Updated")
+                    dbConn.close();
+                }).catch(function (err) {
+                    console.log("Error in Transaction Commit " + err);
+                    dbConn.close();
+                });
+			}).catch(function (err) {
+                console.log("Error in Transaction Begin " + err);
+                dbConn.close();
+            })
+		}).catch(function (err) {
+            console.log(err);
+            dbConn.close();
+        }).catch(function (err) {
+        console.log(err);
+    });
+  });
+});
+
+//PUT API
+app.delete("/persons/:id", function(req , res){
+	var dbConn = new sql.ConnectionPool(dbConfig);
+    dbConn.connect().then(function () {
+		var transaction = new sql.Transaction(dbConn);
+		transaction.begin().then(function () {
+            var request = new sql.Request(transaction);
+            console.log(req.body)
+            var sqlStatment = "DELETE FROM persons WHERE id='"+req.params.id+"';";
+            request.query(sqlStatment)
+			.then(function 	() {
+				transaction.commit().then(function (resp) {
+                    console.log(resp);
+                    res.send("Value Deleted")
+                    dbConn.close();
+                }).catch(function (err) {
+                    console.log("Error in Transaction Commit " + err);
+                    dbConn.close();
+                });
+			}).catch(function (err) {
+                console.log("Error in Transaction Begin " + err);
+                dbConn.close();
+            })
+		}).catch(function (err) {
+            console.log(err);
+            dbConn.close();
+        }).catch(function (err) {
         console.log(err);
     });
   });
