@@ -33,7 +33,7 @@ const PersonForm = (props) => (
       <input className="form-control" pattern="^[0-9]{3,45}$" value={props.newNumber} onChange={props.handleNumberChange}/>
     </div>
     <div>
-      <button type="submit" className="btn btn-primary">Add</button>
+      <button type="submit" className="btn btn-primary">Save</button>
     </div>
   </form>
 )
