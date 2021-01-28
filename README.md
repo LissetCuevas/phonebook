@@ -1,13 +1,13 @@
 # phonebook
 CRUD App  MSSQL + Express + React +Nodejs
 
-### To run server
+### Run server (backend)
 ``` 
 $ cd server
 $ node index.js
 ``` 
 
-### To run client (frontend)
+### Run client (frontend)
 ``` 
 $ cd client
 $ npm install
